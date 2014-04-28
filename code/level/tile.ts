@@ -1,4 +1,4 @@
-///<reference path="../three.d.ts"/>
+///<reference path="../lib/three.d.ts"/>
 ///<reference path="../game.ts"/>
 class Tile {
     texture: THREE.Texture;

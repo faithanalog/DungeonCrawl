@@ -1,8 +1,7 @@
-///<reference path="globals.d.ts"/>
-///<reference path="preload.d.ts"/>
-///<reference path="three.d.ts"/>
-///<reference path="input.d.ts"/>
-///<reference path="requestAnimFrame.ts"/>
+///<reference path="lib/preload.d.ts"/>
+///<reference path="lib/three.d.ts"/>
+///<reference path="lib/input.d.ts"/>
+///<reference path="lib/requestAnimFrame.ts"/>
 ///<reference path="level/level.ts"/>
 ///<reference path="level/tile.ts"/>
 ///<reference path="audio.ts"/>
@@ -133,16 +132,16 @@ class Game {
         // game.scene.add(sun);
         // renderer.shadowMapDebug = true;
 
-        var testObj = new THREE.Mesh(new THREE.SphereGeometry(0.20, 32, 32), new THREE.MeshPhongMaterial({
-            color: 0xFF0000,
-            ambient: 0xFF0000,
-            // diffuse: 0xFF0000,
-            metal: true
-        }));
-        testObj.castShadow = true;
+        // var testObj = new THREE.Mesh(new THREE.SphereGeometry(0.20, 32, 32), new THREE.MeshPhongMaterial({
+        //     color: 0xFF0000,
+        //     ambient: 0xFF0000,
+        //     // diffuse: 0xFF0000,
+        //     metal: true
+        // }));
+        // testObj.castShadow = true;
         // testObj.receiveShadow = true;
-        testObj.position.set(15.5, 0.35, 17.5);
-        game.scene.add(testObj);
+        // testObj.position.set(15.5, 0.35, 17.5);
+        // game.scene.add(testObj);
 
         game.clock = new THREE.Clock(true);
         game.lastUpdate = -1;
@@ -212,6 +211,8 @@ class Game {
         pos.x += velx * cos - velz * sin;
         pos.y = 0.5;
         pos.z += velx * sin + velz * cos;
+        
+        this.level.tick();
     }
 }
 var game = new Game();

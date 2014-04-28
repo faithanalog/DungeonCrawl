@@ -16,32 +16,44 @@ class AABB {
         this.depth = depth;
     }
 
-    minX():number {
+    minX(): number {
         return this.x - this.width / 2;
     }
-    minY():number {
+    minY(): number {
         return this.y - this.height / 2;
     }
-    minZ():number {
+    minZ(): number {
         return this.z - this.depth / 2;
     }
-    maxX():number {
+    maxX(): number {
         return this.x + this.width / 2;
     }
-    maxY():number {
+    maxY(): number {
         return this.y + this.height / 2;
     }
-    maxZ():number {
+    maxZ(): number {
         return this.z + this.depth / 2;
     }
+    
+    setPosition(x: number, y: number, z: number): void {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
+    setSize(width: number, height: number, depth: number): void {
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+    }
 
-    intersects(box: AABB):boolean {
+    intersects(box: AABB): boolean {
         return this.minX() <= box.maxX() && this.maxX() >= box.minX()
             && this.minY() <= box.maxY() && this.maxY() >= box.minY()
             && this.minZ() <= box.maxZ() && this.maxZ() >= box.minZ();
     }
 
-    inersectsBounds(x: number, y: number, z: number, width: number, height: number, depth: number):boolean {
+    inersectsBounds(x: number, y: number, z: number, width: number, height: number, depth: number): boolean {
         var hw = width / 2;
         var hh = height / 2;
         var hd = depth / 2;
