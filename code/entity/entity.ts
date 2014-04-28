@@ -36,7 +36,6 @@ class Entity {
         this.mesh.position.set(this.bounds.x, this.bounds.y, this.bounds.z);
     }
     
-    
     /**
      * Override this to provide entity logic
      */
@@ -60,11 +59,37 @@ class Entity {
     }
 }
 
-//Just for testing
-class EntityBall extends Entity {
+class EntityLiving extends Entity {
+    velX: number;
+    velY: number;
+    velZ: number;
+    
     constructor(level: Level) {
         super(level);
+        this.velX = 0;
+        this.velY = 0;
+        this.velZ = 0;
+    }
+    
+    update() {
+        this.bounds.translate(this.velX, this.velY, this.velZ);
+        // this.bounds.x += this.velX;
+        // this.bounds.y += this.velY;
+        // this.bounds.z += this.velZ;
+    }
+}
+
+//Just for testing
+class EntityBall extends EntityLiving {
+    
+    private minX: number;
+    private maxX: number;
+    
+    constructor(level: Level, minX: number, maxX: number) {
+        super(level);
         this.bounds.setSize(0.2, 0.2, 0.2);
+        this.minX = minX;
+        this.maxX = maxX;
         
         this.mesh = new THREE.Mesh(new THREE.SphereGeometry(0.2, 32, 32), new THREE.MeshPhongMaterial({
             color: 0xFF0000,
@@ -80,8 +105,13 @@ class EntityBall extends Entity {
     }
     
     update() {
-        if (this.getSecondsLived() >= 5) {
-            this.die();
+        super.update();
+        if (this.bounds.minX() <= this.minX) {
+            this.velX *= -1;
+            this.bounds.x += this.minX - this.bounds.minX();
+        } else if (this.bounds.maxX() >= this.maxX) {
+            this.velX *= -1;
+            this.bounds.x += this.maxX - this.bounds.maxX();
         }
     }
 }

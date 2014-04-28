@@ -49,8 +49,9 @@ class Level {
         this.mesh.add(floor);
         
         
-        var ball = new EntityBall(this);
+        var ball = new EntityBall(this, 14.5, 16.5);
         ball.bounds.setPosition(15.5, 0.35, 17.5);
+        ball.velX = 1 / 60;
         this.spawnEntity(ball);
         
         

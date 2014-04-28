@@ -41,6 +41,12 @@ class AABB {
         this.z = z;
     }
     
+    translate(x: number, y: number, z: number): void {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
+    
     setSize(width: number, height: number, depth: number): void {
         this.width = width;
         this.height = height;
