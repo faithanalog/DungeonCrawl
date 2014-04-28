@@ -1,0 +1,23 @@
+{
+    "root": "res/",
+    "files": {
+        "Brick": {
+            "type": "texture",
+            "path": "tex/Brick.png",
+            "minFilter": "nearestMipMapNearest",
+            "magFilter": "nearest"
+        },
+        "Grass": {
+            "type": "texture",
+            "path": "tex/GrassTop.png",
+            "minFilter": "nearestMipMapNearest",
+            "magFilter": "nearest",
+            "wrapS": "repeat",
+            "wrapT": "repeat"
+        },
+        "TestSound": {
+            "type": "sound",
+            "path": "sounds/test_sound.wav"
+        }
+    }
+}

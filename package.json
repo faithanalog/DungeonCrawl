@@ -1,0 +1,12 @@
+{
+    "name": "LD29",
+    "description": "Unknown's LD29 server",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "express": "4.x",
+        "async": "0.7.0",
+        "node-minify": "0.10.2"
+    }
+}
+
