@@ -5,12 +5,15 @@ A basic dungeon crawler in js/typescript
 Building
 ---
 * Install the TypeScript compiler
-      npm install -g typescript
+
+        npm install -g typescript
 * Navigate to the root directory of the repo.
 * Run build.sh
-      sh build.sh
+
+        sh build.sh
     or use this command instead (contents of build.sh)
-      tsc --target ES5 --removeComments --out site/game.js code/game.ts
+
+        tsc --target ES5 --removeComments --out site/game.js code/game.ts
 
 Running
 ---
