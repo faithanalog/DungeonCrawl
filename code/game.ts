@@ -3,6 +3,7 @@
 ///<reference path="lib/input.d.ts"/>
 ///<reference path="lib/requestAnimFrame.ts"/>
 ///<reference path="level/level.ts"/>
+///<reference path="entity/entity.ts"/>
 ///<reference path="level/tile.ts"/>
 ///<reference path="audio.ts"/>
 class Game {
@@ -55,32 +56,32 @@ class Game {
         document.body.appendChild(elem);
 
         window.onresize = function() {
-            game.cam.aspect = window.innerWidth / window.innerHeight;
-            game.cam.updateProjectionMatrix();
-            game.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.cam.aspect = window.innerWidth / window.innerHeight;
+            this.cam.updateProjectionMatrix();
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
         };
 
-        game.audio = new GameAudio();
-        game.audio.setVolume(0.25);
-        //game.audio.playSound(game.files.TestSound);
-        //game.audio.streamAudio("res/songs/RQ_TouchTouch_VIP.mp3");
+        this.audio = new GameAudio();
+        this.audio.setVolume(0.25);
+        //this.audio.playSound(this.files.TestSound);
+        //this.audio.streamAudio("res/songs/RQ_TouchTouch_VIP.mp3");
 
         //Init tiles
         Tiles.initTiles();
 
-        game.level = new Level(32, 32);
+        this.level = new Level(32, 32);
 
-        game.cam.rotation.order = 'YXZ';
-        game.cam.position.x = 16;
-        game.cam.position.z = 18;
-        game.scene.add(game.level.mesh);
+        this.cam.rotation.order = 'YXZ';
+        this.cam.position.x = 16;
+        this.cam.position.z = 18;
+        this.scene.add(this.level.mesh);
 
-        game.ambientLight = new THREE.AmbientLight(0x808080);
-        game.scene.add(game.ambientLight);
+        this.ambientLight = new THREE.AmbientLight(0x808080);
+        this.scene.add(this.ambientLight);
 
 
-        // game.directLight = new THREE.DirectionalLight(0xFFFFFF, 1.6);
-        // var light = game.directLight;
+        // this.directLight = new THREE.DirectionalLight(0xFFFFFF, 1.6);
+        // var light = this.directLight;
         // light.shadowMapWidth = light.shadowMapHeight = 4096;
         // light.position.set(150, 100, 150);
         // light.target.position.set(32, 0, 32);
@@ -93,69 +94,66 @@ class Game {
         // light.shadowCameraTop = d + 5;
         // light.shadowCameraBottom = -d + 5;
         // light.shadowBias = 0.00003;
-        // game.scene.add(light);
+        // this.scene.add(light);
 
-        var light = game.playerLight = new THREE.PointLight(0xFFFFFF, 1, 16);
+        var light = this.playerLight = new THREE.PointLight(0xFFFFFF, 1, 16);
 
-        light.position = game.cam.position;
-        game.scene.add(light);
+        light.position = this.cam.position;
+        this.scene.add(light);
 
 
-        var shadowLight = game.shadowLight = new THREE.SpotLight(0xFFFFFF, 0, 100, Math.PI / 3);
-        // shadowLight.position = game.cam.position;
+        var shadowLight = this.shadowLight = new THREE.SpotLight(0xFFFFFF, 0, 100, Math.PI / 3);
+        // shadowLight.position = this.cam.position;
         shadowLight.castShadow = true;
         shadowLight.onlyShadow = true;
-        shadowLight.shadowCameraNear = game.cam.near;
-        shadowLight.shadowCameraFar = game.cam.far;
+        shadowLight.shadowCameraNear = this.cam.near;
+        shadowLight.shadowCameraFar = this.cam.far;
         shadowLight.shadowCameraFov = 120;
         shadowLight.shadowMapWidth = shadowLight.shadowMapHeight = 2048;
         shadowLight.shadowBias = 0.00003;
 
-        game.scene.add(game.cam);
-        game.cam.add(shadowLight);
-        game.cam.add(shadowLight.target);
+        this.scene.add(this.cam);
+        this.cam.add(shadowLight);
+        this.cam.add(shadowLight.target);
         shadowLight.position.set(0, 0, 0.5);
         shadowLight.target.position.set(0, 0, -0.5);
-        // shadowLight.target = game.cam;
-        // shadowLight.target.position.set(0, 0, -1);
-        // game.scene.add(shadowLight);
 
 
-        var renderer = game.renderer;
+        var renderer = this.renderer;
         renderer.shadowMapEnabled = true;
         renderer.shadowMapSoft = true;
         renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        
+        this.input.onkeyup = function(evt: KeyboardEvent) {
+            //Space
+            if (evt.keyCode === 32) {
+                var level = game.level;
+                
+                var x = game.cam.position.x;
+                var y = game.cam.position.y;
+                var z = game.cam.position.z;
+                
+                var ball = new EntityBall(level, x - 1, x + 1);
+                ball.bounds.setPosition(x, 0.35, z);
+                ball.velX = 1 / 60;
+                level.spawnEntity(ball);
+            }
+        };
 
-        // var sun = new THREE.Mesh(new THREE.SphereGeometry(10, 20, 20), new THREE.MeshBasicMaterial({color: 0xFFDF00}));
-        // sun.name = "sun";
-        // sun.position.set(150, 100, 150);
-        // game.scene.add(sun);
-        // renderer.shadowMapDebug = true;
-
-        // var testObj = new THREE.Mesh(new THREE.SphereGeometry(0.20, 32, 32), new THREE.MeshPhongMaterial({
-        //     color: 0xFF0000,
-        //     ambient: 0xFF0000,
-        //     // diffuse: 0xFF0000,
-        //     metal: true
-        // }));
-        // testObj.castShadow = true;
-        // testObj.receiveShadow = true;
-        // testObj.position.set(15.5, 0.35, 17.5);
-        // game.scene.add(testObj);
-
-        game.clock = new THREE.Clock(true);
-        game.lastUpdate = -1;
+        this.clock = new THREE.Clock(true);
+        this.lastUpdate = -1;
         requestAnimationFrame(game.loop);
     }
 
     loop(time) {
+        time = game.clock.getElapsedTime() * 1000; //Convert to milliseconds
         requestAnimationFrame(game.loop);
         if (game.lastUpdate === -1 || time - game.lastUpdate >= 1000) {
             game.lastUpdate = time;
         }
-        while (time - game.lastUpdate >= 16.6667) {
+        while (time - game.lastUpdate >= 16.666667) {
             game.tick();
-            game.lastUpdate += 16.6667;
+            game.lastUpdate += 16.666667;
         }
         game.render();
     }

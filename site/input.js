@@ -11,9 +11,14 @@ function Input(elem) {
 			   document.mozExitPointerLock ||
 			   document.webkitExitPointerLock;
 
+    this.onkeydown = null;
+    this.onkeyup = null;
+    this.onmousedown = null;
+    this.onmouseup = null;
+
     this.isKeyDown = function(key) {
         return this.keys[key];
-    }
+    };
 
     this.isCharDown = function(char) {
         return this.keys[char.charCodeAt(0)];
@@ -47,10 +52,10 @@ function Input(elem) {
             e.mozMovementY      ||
             e.webkitMovementY   ||
             0;
-        if (Math.abs(movementX) >= 200) {
+        if (Math.abs(movementX) >= 400) {
             movementX = 0;
         }
-        if (Math.abs(movementY) >= 200) {
+        if (Math.abs(movementY) >= 400) {
             movementY = 0;
         }
         var sens = 0.0020;
@@ -68,17 +73,29 @@ function Input(elem) {
 
     elem.onkeydown = function(evt) {
         scope.keys[evt.keyCode] = true;
+        if (scope.onkeydown !== null) {
+            scope.onkeydown(evt);
+        }
 
     };
     elem.onkeyup = function(evt) {
         scope.keys[evt.keyCode] = false;
+        if (scope.onkeyup !== null) {
+            scope.onkeyup(evt);
+        }
     };
     elem.onmousedown = function(evt) {
         // evt.preventDefault();
         elem.requestPointerLock();
+        if (scope.onmousedown !== null) {
+            scope.onmousedown(evt);
+        }
     };
     elem.onmouseup = function(evt) {
         // evt.preventDefault();
+        if (scope.onmouseup !== null) {
+            scope.onmouseup(evt);
+        }
     };
     elem.oncontextmenu = function() {
         return false;

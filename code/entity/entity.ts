@@ -17,7 +17,7 @@ class Entity {
     }
 
     spawn(): void {
-        if (this.mesh == null) {
+        if (this.mesh === null) {
             this.mesh = new THREE.Mesh(new THREE.BoxGeometry(this.bounds.width, this.bounds.height, this.bounds.depth),
             new THREE.MeshBasicMaterial({
                 color: 0xFFFF00
@@ -45,7 +45,7 @@ class Entity {
 
     die(): void {
         this.dead = true;
-        if (this.mesh != null) {
+        if (this.mesh !== null) {
             this.level.entityMesh.remove(this.mesh);
         }
     }
@@ -82,6 +82,12 @@ class EntityLiving extends Entity {
 //Just for testing
 class EntityBall extends EntityLiving {
     
+    private static ballMesh = new THREE.Mesh(new THREE.SphereGeometry(0.2, 32, 32), new THREE.MeshPhongMaterial({
+        color: 0xFF0000,
+        ambient: 0xFF0000,
+        metal: true
+    }));
+    
     private minX: number;
     private maxX: number;
     
@@ -91,27 +97,19 @@ class EntityBall extends EntityLiving {
         this.minX = minX;
         this.maxX = maxX;
         
-        this.mesh = new THREE.Mesh(new THREE.SphereGeometry(0.2, 32, 32), new THREE.MeshPhongMaterial({
-            color: 0xFF0000,
-            ambient: 0xFF0000,
-            // diffuse: 0xFF0000,
-            metal: true
-        }));
+        this.mesh = EntityBall.ballMesh.clone();
         this.mesh.castShadow = true;
-    }
-    
-    spawn() {
-        super.spawn();
+        this.mesh.receiveShadow = true;
     }
     
     update() {
         super.update();
-        if (this.bounds.minX() <= this.minX) {
+        if (this.bounds.minX <= this.minX) {
             this.velX *= -1;
-            this.bounds.x += this.minX - this.bounds.minX();
-        } else if (this.bounds.maxX() >= this.maxX) {
+            this.bounds.x += this.minX - this.bounds.minX;
+        } else if (this.bounds.maxX >= this.maxX) {
             this.velX *= -1;
-            this.bounds.x += this.maxX - this.bounds.maxX();
+            this.bounds.x += this.maxX - this.bounds.maxX;
         }
     }
 }

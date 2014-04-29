@@ -16,22 +16,22 @@ class AABB {
         this.depth = depth;
     }
 
-    minX(): number {
+    get minX(): number {
         return this.x - this.width / 2;
     }
-    minY(): number {
+    get minY(): number {
         return this.y - this.height / 2;
     }
-    minZ(): number {
+    get minZ(): number {
         return this.z - this.depth / 2;
     }
-    maxX(): number {
+    get maxX(): number {
         return this.x + this.width / 2;
     }
-    maxY(): number {
+    get maxY(): number {
         return this.y + this.height / 2;
     }
-    maxZ(): number {
+    get maxZ(): number {
         return this.z + this.depth / 2;
     }
     
@@ -54,9 +54,9 @@ class AABB {
     }
 
     intersects(box: AABB): boolean {
-        return this.minX() <= box.maxX() && this.maxX() >= box.minX()
-            && this.minY() <= box.maxY() && this.maxY() >= box.minY()
-            && this.minZ() <= box.maxZ() && this.maxZ() >= box.minZ();
+        return this.minX <= box.maxX && this.maxX >= box.minX
+            && this.minY <= box.maxY && this.maxY >= box.minY
+            && this.minZ <= box.maxZ && this.maxZ >= box.minZ;
     }
 
     inersectsBounds(x: number, y: number, z: number, width: number, height: number, depth: number): boolean {
@@ -72,9 +72,9 @@ class AABB {
         var maxY = y + hh;
         var maxZ = z + hd;
 
-        return this.minX() <= maxX && this.maxX() >= minX
-            && this.minY() <= maxY && this.maxY() >= minY
-            && this.minZ() <= maxZ && this.maxZ() >= minZ;
+        return this.minX <= maxX && this.maxX >= minX
+            && this.minY <= maxY && this.maxY >= minY
+            && this.minZ <= maxZ && this.maxZ >= minZ;
     }
 
 }
